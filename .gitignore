@@ -2,17 +2,6 @@
 *.mdb
 *.exe
 
-INSTALL
-Makefile
-Makefile.in
-aclocal.m4
-autom4te.cache/
-config.*
-configure
-install-sh
-missing
-*.tree
-*.zip
-mzclient
-*.config
-mono-zeroconf.pc
+.vs/
+bin/
+obj/

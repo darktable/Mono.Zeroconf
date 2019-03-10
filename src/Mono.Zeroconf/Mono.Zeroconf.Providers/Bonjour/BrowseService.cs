@@ -53,16 +53,29 @@ namespace Mono.Zeroconf.Providers.Bonjour
         {
             SetupCallbacks();
         }
-        
+
+        IAsyncResult resolveResult = null;
+
+        ~BrowseService()
+        {
+            if (resolveResult != null)
+                this.resolveAction.EndInvoke(resolveResult);
+        }
+
         private void SetupCallbacks()
         {
             resolve_reply_handler = new Native.DNSServiceResolveReply(OnResolveReply);
             query_record_reply_handler = new Native.DNSServiceQueryRecordReply(OnQueryRecordReply);
+            resolveAction = Resolve;
         }
+
+        private Action<bool> resolveAction;
 
         public void Resolve()
         {
-            Resolve(false);
+            // If people call this in a ServiceAdded event handler (which they generally do), we need to
+            // invoke onto another thread, otherwise we block processing any more results.
+            resolveResult = this.resolveAction.BeginInvoke(false, null, null);
         }
         
         public void Resolve(bool requery)
