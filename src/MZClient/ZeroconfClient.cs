@@ -258,9 +258,16 @@ public class MZClient
     private static void OnServiceResolved(object o, ServiceResolvedEventArgs args)
     {
         IResolvableService service = o as IResolvableService;
+
+        // NOTE: According to docs, the Port value is returned 
+        // in Network Byte Order (big endian) and
+        // needs to be swapped on Windows and macOS.
+        var port = (ushort)service.Port;
+        port = (ushort)(((port & 0xff) << 8) | ((port >> 8) & 0xff));
+
         Console.Write ("*** Resolved name = '{0}', host ip = '{1}', hostname = {2}, port = '{3}', " + 
             "interface = '{4}', address type = '{5}'", 
-            service.FullName, service.HostEntry.AddressList[0], service.HostEntry.HostName, service.Port, 
+            service.FullName, service.HostEntry.AddressList[0], service.HostEntry.HostName, port, 
             service.NetworkInterface, service.AddressProtocol);
         
         ITxtRecord record = service.TxtRecord;
