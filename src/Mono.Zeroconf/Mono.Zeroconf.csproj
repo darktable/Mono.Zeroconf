@@ -62,6 +62,8 @@
     <Compile Include="Mono.Zeroconf.Providers\Bonjour\TxtRecord.cs" />
     <Compile Include="Mono.Zeroconf.Providers\Bonjour\TxtRecordEnumerator.cs" />
     <Compile Include="Mono.Zeroconf.Providers\Bonjour\ZeroconfProvider.cs" />
+    <Compile Include="Mono.Zeroconf.Providers\Bonjour\NativeOSX.cs" />
+    <Compile Include="Mono.Zeroconf.Providers\Bonjour\NativeWindows.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
