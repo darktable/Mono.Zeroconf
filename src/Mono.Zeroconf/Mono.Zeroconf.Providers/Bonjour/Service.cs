@@ -127,14 +127,20 @@ namespace Mono.Zeroconf.Providers.Bonjour
             get { return interface_index; }
         }
                 
-        public short Port {
-            get { return (short)UPort; }
-            set { UPort = (ushort)value; }
-        }
-
-        public ushort UPort {
-            get { return port; }
-            set { port = value; }
+        public ushort Port {
+            get
+            {
+                if (BitConverter.IsLittleEndian)
+                    return (ushort)(((port & 0xFF) << 8) | ((port & 0xFF00) >> 8));
+                return port;
+            }
+            set
+            {
+                if (BitConverter.IsLittleEndian)
+                    port = (ushort)(((port & 0xFF) << 8) | ((port & 0xFF00) >> 8));
+                else
+                    port = value;
+            }
         }
     }
 }

@@ -167,7 +167,7 @@ public class MZClient
         }
 
         string type = match.Groups[1].Value.Trim();
-        short port = Convert.ToInt16(match.Groups[2].Value);
+        ushort port = Convert.ToUInt16(match.Groups[2].Value);
         string name = match.Groups[3].Value.Trim();
         
         int txt_pos = name.IndexOf("TXT");
@@ -259,15 +259,9 @@ public class MZClient
     {
         IResolvableService service = o as IResolvableService;
 
-        // NOTE: According to docs, the Port value is returned 
-        // in Network Byte Order (big endian) and
-        // needs to be swapped on Windows and macOS.
-        var port = (ushort)service.Port;
-        port = (ushort)(((port & 0xff) << 8) | ((port >> 8) & 0xff));
-
         Console.Write ("*** Resolved name = '{0}', host ip = '{1}', hostname = {2}, port = '{3}', " + 
             "interface = '{4}', address type = '{5}'", 
-            service.FullName, service.HostEntry.AddressList[0], service.HostEntry.HostName, port, 
+            service.FullName, service.HostEntry.AddressList[0], service.HostEntry.HostName, service.Port, 
             service.NetworkInterface, service.AddressProtocol);
         
         ITxtRecord record = service.TxtRecord;
