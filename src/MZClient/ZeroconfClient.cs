@@ -259,26 +259,30 @@ public class MZClient
     {
         IResolvableService service = o as IResolvableService;
 
-        Console.Write ("*** Resolved name = '{0}', host ip = '{1}', hostname = {2}, port = '{3}', " + 
-            "interface = '{4}', address type = '{5}'", 
+        var builder = new System.Text.StringBuilder();
+
+        builder.AppendFormat("*** Resolved name = '{0}', host ip = '{1}', hostname = '{2}', port = '{3}', " + 
+            "interface = '{4}', address type = '{5}',\n", 
             service.FullName, service.HostEntry.AddressList[0], service.HostEntry.HostName, service.Port, 
             service.NetworkInterface, service.AddressProtocol);
         
         ITxtRecord record = service.TxtRecord;
         int record_count = record != null ? record.Count : 0;
         if(record_count > 0) {
-            Console.Write(", TXT Record = [");
+            builder.Append(" TXT Record = [");
             for(int i = 0, n = record.Count; i < n; i++) {
                 TxtRecordItem item = record.GetItemAt(i);
-                Console.Write("{0} = '{1}'", item.Key, item.ValueString);
+                builder.AppendFormat("{0} = '{1}'", item.Key, item.ValueString);
                 if(i < n - 1) {
-                    Console.Write(", ");
+                    builder.Append(", ");
                 }
             }
-            Console.WriteLine("]");
+            builder.AppendLine("]");
         } else {
-            Console.WriteLine("");
+            builder.AppendLine("");
         }
+
+        Console.WriteLine(builder);
     }
     
     private static void OnRegisterServiceResponse(object o, RegisterServiceEventArgs args)
